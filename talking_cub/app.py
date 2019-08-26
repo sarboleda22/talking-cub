@@ -4,16 +4,21 @@ import os
 import re
 import sys
 
+from google.cloud import texttospeech
+
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
 import pyaudio
 from six.moves import queue
 
+import simpleaudio as sa
+from fuzzywuzzy import fuzz
+from q_a import QUESTIONS_ANSWERS_DICT
+
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
-
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -80,7 +85,35 @@ class MicrophoneStream(object):
             yield b''.join(data)
 
 
-def listen_print_loop(responses):
+def get_answer_audio(answer, text_to_speech_client):
+    """Uses GCloud Text to Speech API to generate an audio file with the response and plays it."""
+    # Build the voice request, select the language code ("en-US") and the ssml
+    # voice gender ("neutral")
+    voice = texttospeech.types.VoiceSelectionParams(
+        language_code='en-US',
+        ssml_gender=texttospeech.enums.SsmlVoiceGender.NEUTRAL)
+    audio_config = texttospeech.types.AudioConfig(
+        audio_encoding=texttospeech.enums.AudioEncoding.LINEAR16)
+
+    # Set the text input to be synthesized
+    synthesis_input = texttospeech.types.SynthesisInput(text=answer)
+
+    response = text_to_speech_client.synthesize_speech(synthesis_input, voice, audio_config)
+
+    # The response's audio_content is binary.
+    with open('output.wav', 'wb') as out:
+        # Write the response to the output file.
+        out.write(response.audio_content)
+        print('Audio content written to file "output.wav"')
+
+def play_answer_audio():
+    filename = 'output.wav'
+    wave_obj = sa.WaveObject.from_wave_file(filename)
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
+
+
+def listening_loop(responses, text_to_speech_client):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -133,6 +166,15 @@ def listen_print_loop(responses):
                 print('Exiting..')
                 break
 
+            # Get the most similar question we have
+            for question in QUESTIONS_ANSWERS_DICT:
+                acc_ratio = fuzz.ratio(transcript, question)
+                if acc_ratio >= 85:
+                    answer = QUESTIONS_ANSWERS_DICT[question]
+                    get_answer_audio(answer, text_to_speech_client)
+                    play_answer_audio()
+                    break
+
             num_chars_printed = 0
 
 
@@ -146,7 +188,10 @@ def main():
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '{}/{}'.format(dir_path, gc_key_file)
 
-    client = speech.SpeechClient()
+    # Speech-To-Text and Text-To-Speech clients config
+    tts_client = texttospeech.TextToSpeechClient()
+    # stt config
+    stt_client = speech.SpeechClient()
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
@@ -154,17 +199,17 @@ def main():
     streaming_config = types.StreamingRecognitionConfig(
         config=config,
         interim_results=True)
+    # tts config
+    tts_client = texttospeech.TextToSpeechClient()
 
     with MicrophoneStream(RATE, CHUNK) as stream:
         audio_generator = stream.generator()
         requests = (types.StreamingRecognizeRequest(audio_content=content)
                     for content in audio_generator)
 
-        responses = client.streaming_recognize(streaming_config, requests)
-
+        responses = stt_client.streaming_recognize(streaming_config, requests)
         # Now, put the transcription responses to use.
-        listen_print_loop(responses)
-
+        listening_loop(responses, tts_client)
 
 if __name__ == '__main__':
     main()
