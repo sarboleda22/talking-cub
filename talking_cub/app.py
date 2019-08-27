@@ -3,17 +3,19 @@ from __future__ import division
 import os
 import re
 import sys
+import RPi.GPIO as GPIO
 
 from google.cloud import texttospeech
-
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
-import pyaudio
+
 from six.moves import queue
 
+import pyaudio
 import simpleaudio as sa
 from fuzzywuzzy import fuzz
+
 from q_a import QUESTIONS_ANSWERS_DICT
 
 # Audio recording parameters
@@ -128,6 +130,7 @@ def listening_loop(responses, text_to_speech_client):
     the next result to overwrite it, until the response is a final one. For the
     final one, print a newline to preserve the finalized transcription.
     """
+    activated = False
     num_chars_printed = 0
     for response in responses:
         if not response.results:
@@ -166,19 +169,36 @@ def listening_loop(responses, text_to_speech_client):
                 print('Exiting..')
                 break
 
-            # Get the most similar question we have
-            for question in QUESTIONS_ANSWERS_DICT:
-                acc_ratio = fuzz.ratio(transcript, question)
-                if acc_ratio >= 85:
-                    answer = QUESTIONS_ANSWERS_DICT[question]
-                    get_answer_audio(answer, text_to_speech_client)
-                    play_answer_audio()
-                    break
+            # Wait for activation word
+            if not activated and 'simba' in transcript.lower():
+                activated = True
+                GPIO.output(17, GPIO.HIGH)
+                print("Ask me a question!")
+            # If already activated, get the most similar question we have
+            elif activated:
+                GPIO.output(17, GPIO.LOW)
+                for question in QUESTIONS_ANSWERS_DICT:
+                    acc_ratio = fuzz.ratio(transcript, question)
+                    if acc_ratio >= 70:
+                        GPIO.output(18, GPIO.HIGH)
+                        answer = QUESTIONS_ANSWERS_DICT[question]
+                        get_answer_audio(answer, text_to_speech_client)
+                        play_answer_audio()
+                        GPIO.output(18, GPIO.LOW)
+                        break
+                activated = False
 
             num_chars_printed = 0
 
 
 def main():
+    # Set Up outout GPIO Pins and set Low
+    GPIO.setmode(GPIO.BCM) # numerical mode
+    GPIO.setup(17, GPIO.OUT) # white LED
+    GPIO.setup(18, GPIO.OUT) # red LED
+    GPIO.output(17, GPIO.LOW)
+    GPIO.output(18, GPIO.LOW)
+
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
