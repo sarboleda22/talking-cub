@@ -18,7 +18,7 @@ from q_a import QUESTIONS_ANSWERS_DICT
 
 # Audio recording parameters
 RATE = 44100
-CHUNK = int(RATE / 10)  # 100ms
+CHUNK = 1600  # 100ms
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
