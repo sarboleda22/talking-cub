@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="content">
+  <div class="container">
+    {% for inquiry in inquiries %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="product-name">{{inquiry.question}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <hr>
+                    <h5>{{inquiry.answer}}</h5>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <a href="/dashboard/inquiry/{{inquiry.id}}/" class="btn btn-edit">Edit</a>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="inquires">{{inquiry.times_asked}} Inquires</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

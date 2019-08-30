@@ -21,6 +21,7 @@ from q_a import QUESTIONS_ANSWERS_DICT
 # Audio recording parameters
 RATE = 44100
 CHUNK = 1600  # 100ms
+ACTIVATION_WORD = 'simba' # speaker's name
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -170,7 +171,7 @@ def listening_loop(responses, text_to_speech_client):
                 break
 
             # Wait for activation word
-            if not activated and 'simba' in transcript.lower():
+            if not activated and ACTIVATION_WORD in transcript.lower():
                 activated = True
                 GPIO.output(17, GPIO.HIGH)
                 print("Ask me a question!")

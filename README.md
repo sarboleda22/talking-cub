@@ -15,3 +15,8 @@ sudo apt-get install portaudio19-dev python-pyaudio python3-pyaudio
 pip install pyaudio
 ```
 
+## TODO
+### Webapp
+1. Add `last_edited` to the webapp's inquiry DB and make inquiries in dashboard ordered by date.
+2. Make the PIN evaluation (authorization) better. Possibly taking it from an env_variable or docker secret.
+### Speaker - Device

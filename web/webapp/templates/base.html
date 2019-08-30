@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Talking Cub | ENC Smart Speaker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+          <!--     Fonts and icons     -->
+        <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}" />
+        <!-- JS Files-->
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-transparent">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url_for('static', filename='img/enc_logo.png') }}" width="50" height="50" alt="">
+                </a>
+            </div>
+        </nav>
+        <div id="main">
+            <div class="header">
+                    <div class="header-title">Talking Cub</div>
+                    <h5>A Smart Speaker for <a href="https://enc.edu"><b class="red">Eastern Nazarene College</b></a></h5>
+                    <div class="header-subtitle">Edit the following questions and answers so that our speaker knows what to say!</div>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

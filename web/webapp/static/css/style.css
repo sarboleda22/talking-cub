@@ -1,0 +1,279 @@
+*{box-sizing: border-box;}
+
+/*------ Hide controls in mobile devices -------*/
+*::-webkit-media-controls-panel {
+  display: none!important;
+  -webkit-appearance: none;
+}
+
+*::-webkit-media-controls-play-button {
+  display: none!important;
+  -webkit-appearance: none;
+}
+
+*::-webkit-media-controls-start-playback-button {
+  display: none!important;
+  -webkit-appearance: none;
+}
+/*---------------------------------------*/
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+	margin: 0;
+	background: #ebecf1;
+  color: #111;
+	font-family: "Montserrat", "Helvetica", "Arial", "Verdana", "sans-serif";
+	font-size: 12pt;
+	line-height: 1.25;
+	text-align: center;
+  overflow-x: hidden;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #850b2a;
+}
+
+.red {
+  color: #c50e3c
+}
+
+body #main {
+  overflow-x: hidden;
+}
+
+img {
+	max-width: 100%;
+}
+
+textarea {
+  height: 200px;
+}
+
+.container {
+  max-width: 658px;
+}
+
+#content {
+  background-color: transparent;
+  color: #111;
+  height: 100%;
+  text-align: left;
+  min-height: calc(100vh - 135px); /* header is already 135px */
+  margin-top: 30px;
+}
+
+.alert {
+  margin-bottom: 0; 
+}
+
+.header {
+  color: #111;
+  padding: 80px 20px;
+  background: #fff;
+  min-height: 10vh;
+}
+
+.header-title {
+  font-weight: 700;
+  font-size: 2.5em;
+  padding-bottom: 10px;
+}
+
+.header-subtitle {
+  font-size: 14px;
+}
+
+.align-left {
+  text-align: left !important;
+}
+
+.card-body input,
+.card-body textarea {
+  color: #111;
+  width: 100%;
+  margin: 5px;
+  padding: 15px;
+  border-radius: 30px;
+  border: 1px solid #e3e3e3;
+  background-color: rgba(255, 255, 255, 0.1);
+  -webkit-transition: background-color .3s;
+  transition: background-color .3s;
+  -webkit-transition: border .4s;
+  transition: border .4s;
+  outline: none;
+}
+
+.card-header {
+  border-bottom: none;
+  background-color: transparent;
+  text-align: right
+}
+
+.card-header .product-name {
+  position: absolute;
+}
+
+.card-header .card-header-title {
+  font-weight: 700;
+  font-size: 1.57em;
+}
+
+/*******NAVBAR*******/
+.navbar {
+  position: absolute;
+  background-color: transparent;
+  color: #fff;
+  padding: 20px;
+  width: 100%;
+}
+
+.navbar a {
+  color: #fff;
+  outline: none;
+}
+
+.navbar .dropdown-menu {
+  position: static;
+}
+
+.navbar .dropdown-item {
+  color: #111;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.bg-img {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+}
+
+/* DASHBOARD */
+.dashboard-card {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.dashboard-card .card-body input,
+.dashboard-card .card-body textarea,
+.dashboard-card .card-body label {
+  margin-bottom: 30px;
+  border-radius: 5px;
+}
+
+.dashboard-card .card-body input:focus,
+.dashboard-card .card-body textarea:focus {
+  border: 1px solid #f96332;
+}
+
+.inquires {
+  margin-top: 2rem;
+  margin-bottom: 0;
+  padding: 0;
+  color: gray;
+}
+
+.btn-edit,
+input[type="submit"] {
+  color: #fff;
+  background-color: #c50e3c;
+  -webkit-transition: background-color .3s;
+  transition: background-color .3s;
+  width: 20%;
+  border-radius: 20px !important;
+  margin-top: 20px;
+}
+.btn-edit:hover,
+input[type="submit"]:hover {
+  color: #fff;
+  background-color: #850b2a;
+}
+
+/* ............. Slider ......... */
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider-round {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider-round:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-round {
+  background-color: #2196F3;
+}
+
+input:focus + .slider-round {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider-round:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/***** end of dashboard ********/
+
+/******** PRODUCT EDITING VIEW ***********/
+.delete-file {
+  position: absolute;
+  top: 2px;
+  right: 15px;
+  z-index: 100;
+  color: red;
+  font-size: 3em;
+}
+
+.edit-product .carousel-control-next,
+.edit-product .carousel-control-prev {
+  height: 50%;
+  top: 25%;
+}
+
+/*** end of product editing view ********/
+
+.not-displayed {
+  opacity: 0.3;
+}
