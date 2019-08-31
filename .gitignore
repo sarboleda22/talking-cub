@@ -5,3 +5,4 @@ __pycache__
 gc_private_key.json
 *.mp3
 *.wav
+env/
