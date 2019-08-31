@@ -11,7 +11,7 @@ class Config:
 
 class Dev(Config):
     """Configuration to be used in Dev environments"""
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:mysecretpassword@localhost:5432/talking_cub"
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:mysecretpassword@postgres:5432/talking_cub"
     SECRET_KEY = 'S@MpLe9SeCrEt#KeY'
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False

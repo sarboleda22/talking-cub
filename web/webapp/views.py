@@ -1,5 +1,6 @@
 """Routes and templating"""
 from flask import (
+    Response,
     render_template,
     redirect,
     request,
@@ -19,7 +20,7 @@ AUTH_TOKEN = 'Token @hvmnt100'
 
 @app.errorhandler(401)
 def custom_401(error):
-    return Response('Unauthorized', 401, {'WWW-Authenticate':'Basic realm="Login Required"'})
+    return Response('Unauthorized: Invalid or missing token.', 401, {'WWW-Authenticate':'Basic realm="Login Required"'})
 
 
 @app.route('/', methods=['GET'])
@@ -55,10 +56,10 @@ def edit_inquiry(inquiry_id):
         )
         return render_template('inquiry.html', inquiry=inquiry)
     elif request.method == 'POST':
-        pin = int(request.form['pin'])
+        pin = int(request.form['pin']) if any(request.form['pin']) else None
         # Authorizing through an individual speaker PIN
         # TODO get this from an env var
-        if pin != DEVICE_PIN:
+        if pin is None or pin != DEVICE_PIN:
             return "UNAUTHORIZED: WRONG PIN"
         # Update object
         inquiry_obj.question = str(request.form['question'])
