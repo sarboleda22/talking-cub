@@ -267,7 +267,7 @@ def listening_loop(responses, text_to_speech_client):
                 break
 
             # Wait for activation word
-            if not activated and transcript.lower().strip() == ACTIVATION_WORD:
+            if not activated and fuzz.ratio(transcript.lower().strip(), ACTIVATION_WORD.lower()) >= 67:
                 activated = True
                 GPIOSetup.active()
                 print("Activated = True")
