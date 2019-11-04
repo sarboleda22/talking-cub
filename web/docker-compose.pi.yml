@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  postgres:
+    image: arm32v7/postgres:11.1
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=talking_cub
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+
+  webapp:
+    image: sarboleda22/talking_cub_web_pi:latest
+    ports:
+      - 8000:8000
+    volumes:
+      - ./webapp:/webapp
+    depends_on:
+      - postgres
+    restart: unless-stopped
+  
+  watchtower:
+    image: v2tec/watchtower:armhf-latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  pgdata: {}

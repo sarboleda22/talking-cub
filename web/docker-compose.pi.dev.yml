@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  postgres:
+    image: arm32v7/postgres:11.1
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=talking_cub
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+
+  webapp:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./webapp:/webapp
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  adminer:
+    image: arm32v7/adminer
+    depends_on:
+    - postgres
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata: {}
