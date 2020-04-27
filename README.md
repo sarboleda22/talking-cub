@@ -10,8 +10,10 @@ This software makes use of GCloud text-to-speech and speech-to-text APIs. Make s
 2. [Install](https://github.com/thomas-vl/GoogleSpeechRPi) Google Cloud SDK.
 3. Install ```google-cloud-speech``` and ```google-cloud-texttospeech``` packages. 
 
-```
-sudo apt-get install portaudio19-dev python-pyaudio python3-pyaudio alsa-tools alsa-utils
+```bash
+sudo apt-get install portaudio19-dev python-pyaudio python3-pyaudio alsa-tools alsa-utils jackd2
+# Start Service
+jack_control start
 ```
 4. Install PyAudio
 ```
